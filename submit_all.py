@@ -25,7 +25,7 @@ for gzfile in gzfiles:
     for exe_file in exe_files:
         with open(exe_file, 'rb') as f:
             files = {'file': ('temp_file_name', f)}
-            #r = requests.post(REST_URL, files=files)
-            print(files)
+            r = requests.post(REST_URL, files=files)
+            print(r.json())
 
     os.system('rm -rf %s' % pcap_dir)
