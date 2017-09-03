@@ -7,6 +7,7 @@ import time
 
 REST_URL = 'http://10.1.1.237:8090/tasks/create/file'
 PCAPS_PATH = '/home/quizumba/pcaps/exit-hourly'
+MACHINES = ['win7', 'win8.1', 'win10']
 SLEEP_TIME = 60 # an hour
 
 pcap_dir = os.path.join(PCAPS_PATH, 'pcap')
@@ -31,8 +32,10 @@ while True:
         for exe_file in exe_files:
             with open(exe_file, 'rb') as f:
                 files = {'file': ('temp_file_name', f)}
-                r = requests.post(REST_URL, files=files)
-                print(r.json())
+                for m in MACHINES:
+                    files['machine'] = m
+                    r = requests.post(REST_URL, files=files)
+                    print(r.json())
 
         os.system('rm -rf %s' % pcap_dir)
 

@@ -4,9 +4,8 @@ import os
 import glob
 import requests
 
-REST_URL = 'http://10.1.1.237:8090/tasks/create/file'
 PCAPS_PATH = '/home/quizumba/pcaps/exit-hourly'
-MACHINES = ['win7', 'win8.1', 'win10']
+EXE_PATH = '/home/quizumba/pcaps/exit-hourly/exe'
 
 pcap_dir = os.path.join(PCAPS_PATH, 'pcap')
 
@@ -25,10 +24,8 @@ for gzfile in gzfiles:
     exe_files = glob.glob("%s" % os.path.join(pcap_dir, 'output', 'exe', '*'))
     for exe_file in exe_files:
         with open(exe_file, 'rb') as f:
-            files = {'file': ('temp_file_name', f)}
-            for m in MACHINES:
-                files['machine'] = m
-                r = requests.post(REST_URL, files=files)
-                print(r.json())
+            filename = '%s.exe' % abs(hash(f))
+
+        os.system('cp %s %s' % (exe_file, os.path.join(EXE_PATH, filename)))
 
     os.system('rm -rf %s' % pcap_dir)
